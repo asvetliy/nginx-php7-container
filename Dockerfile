@@ -55,8 +55,8 @@ RUN set -x \
     && sed -i 's+;browscap = extra/browscap.ini+browscap = /etc/php/7.1/mods-available/browscap.ini+g' /etc/php/7.1/fpm/php.ini \
 #    && pecl -d php_suffix=7.1 install -o -f redis memcached \
     && mkdir -p /run/php \
-#    && apt-get install -y python3-venv python3-pip \
-#    && pip install supervisor supervisor-stdout \
+    && apt install python3 python3-pip --no-install-recommends --no-install-suggests -q -y \
+    && pip3 install supervisor supervisor-stdout --break-system-packages\
     # Configuring
     && echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d \
     && rm -rf /etc/nginx/conf.d/default.conf \
