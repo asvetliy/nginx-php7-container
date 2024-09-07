@@ -8,4 +8,4 @@ sed -i -e "s/worker_processes  1/worker_processes $procs/" /etc/nginx/nginx.conf
 chown -Rf nginx:nginx /usr/share/nginx/html
 
 # Start supervisord and services
-/usr/local/bin/supervisord -n -c /etc/supervisord.conf
+/usr/bin/supervisord -n -c /etc/supervisord.conf

@@ -14,20 +14,19 @@ ARG CUSTOM_DEPS=''
 
 # Install Basic Requirements
 RUN set -x \
-    && apt-get update \
-    && apt-get install --no-install-recommends --no-install-suggests -q -y ${BUILD_DEPS} \
-    && apt-get install --no-install-recommends --no-install-suggests -q -y ${EXTRA_DEPS} \
-    # Nginx install
+    && apt update \
+    && apt install --no-install-recommends --no-install-suggests -q -y ${BUILD_DEPS} \
+    && apt install --no-install-recommends --no-install-suggests -q -y ${EXTRA_DEPS} \
     && curl https://nginx.org/keys/nginx_signing.key | gpg --dearmor | tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null \
     && gpg --dry-run --quiet --no-keyring --import --import-options import-show /usr/share/keyrings/nginx-archive-keyring.gpg \
     && echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] https://nginx.org/packages/debian `lsb_release -cs` nginx" | tee /etc/apt/sources.list.d/nginx.list \
-#    && echo -e "Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900\n" | tee /etc/apt/preferences.d/99nginx \
     && wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg \
     && echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list \
-    && apt-get update \
-    && apt-get install -q -y nginx \
-    # PHP 7.1 install
-    && apt-get install --no-install-recommends --no-install-suggests -q -y \
+    && apt update \
+    && apt install python3 python3-pip --no-install-recommends --no-install-suggests -q -y \
+    && pip3 install supervisor-stdout --break-system-packages\
+    && apt install -q -y nginx \
+    && apt install -q -y \
             php7.1-fpm \
             php7.1-cli \
             php7.1-bcmath \
@@ -41,23 +40,21 @@ RUN set -x \
             php7.1-curl \
             php7.1-gd \
             php7.1-imagick \
+            php7.1-msgpack \
             php7.1-mysql \
             php7.1-zip \
             php7.1-pgsql \
             php7.1-intl \
             php7.1-xml \
             php-pear \
+            php-msgpack \
             php7.1-memcached \
             php7.1-redis \
     && cd /tmp \
     && wget https://browscap.org/stream?q=PHP_BrowsCapINI \
     && mv 'stream?q=PHP_BrowsCapINI' /etc/php/7.1/mods-available/browscap.ini \
     && sed -i 's+;browscap = extra/browscap.ini+browscap = /etc/php/7.1/mods-available/browscap.ini+g' /etc/php/7.1/fpm/php.ini \
-#    && pecl -d php_suffix=7.1 install -o -f redis memcached \
     && mkdir -p /run/php \
-    && apt install python3 python3-pip --no-install-recommends --no-install-suggests -q -y \
-    && pip3 install supervisor supervisor-stdout --break-system-packages\
-    # Configuring
     && echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d \
     && rm -rf /etc/nginx/conf.d/default.conf \
     && sed -i -e "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g" ${PHP_CONF} \
@@ -80,18 +77,15 @@ RUN set -x \
     && ln -sf /etc/php/7.1/mods-available/redis.ini /etc/php/7.1/cli/conf.d/20-redis.ini \
     && ln -sf /etc/php/7.1/mods-available/memcached.ini /etc/php/7.1/fpm/conf.d/20-memcached.ini \
     && ln -sf /etc/php/7.1/mods-available/memcached.ini /etc/php/7.1/cli/conf.d/20-memcached.ini \
-    # Install Composer
     && curl -o /tmp/composer-setup.php https://getcomposer.org/installer \
     && curl -o /tmp/composer-setup.sig https://composer.github.io/installer.sig \
     && php -r "if (hash('SHA384', file_get_contents('/tmp/composer-setup.php')) !== trim(file_get_contents('/tmp/composer-setup.sig'))) { unlink('/tmp/composer-setup.php'); echo 'Invalid installer' . PHP_EOL; exit(1); }" \
     && php /tmp/composer-setup.php --no-ansi --install-dir=/usr/local/bin --filename=composer --version=${COMPOSER_VERSION} \
     && rm -rf /tmp/composer-setup.php \
-    # Upgrade \
-    && apt-get update && apt-get upgrade -y \
-    # Clean up
+    && apt update && apt upgrade -y \
     && rm -rf /tmp/pear \
-    && apt-get clean \
-    && apt-get autoremove \
+    && apt clean \
+    && apt autoremove \
     && rm -rf /var/lib/apt/lists/*
 
 # Supervisor config

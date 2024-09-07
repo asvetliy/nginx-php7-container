@@ -29,6 +29,7 @@
                     CONFIG: </strong><?php echo php_ini_loaded_file(); ?><br><strong>WEB
                     ROOT: </strong><?php echo $_ENV['DOCUMENT_ROOT'] ?>
                 <br><strong>HOSTNAME: </strong><?php echo gethostname(); ?><br></p>
+            <p><strong>PHP INFO: </strong><a href="phpinfo.php">LINK</a></p>
         </div>
     </div>
 </div>
