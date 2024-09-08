@@ -1,12 +1,11 @@
 # Docker nginx + php7.1 container
 
-Docker container based on `debian:stable-slim` version. Using `nginx stable` version with `php 7.1`. This is simple container for my own personally purpose. If you have an idea how to improve it, contact me [o.svitlyi@gmail.com](mailto:o.svitlyi@gmail.com)
+Docker container based on `debian:stable-slim` version. Using `nginx stable` version with `php 7.1`. This is simple container for my own personally purpose. If you have an idea how to improve it, feel free to contact me [o.svitlyi@gmail.com](mailto:o.svitlyi@gmail.com)
 
 ## Includes packages
 
- * nginx, nano, memcached, curl/wget, zip/unzip, supervisor
- * git, composer
- * php 7.1 (fpm, cli, bcmath, dev, common, json, opcache, readline, mbstring, mcrypt, curl, gd, imagick, mysql, zip, pgsql,  intl, xml, pear, browscap)
+ * nginx, nano, curl/wget, zip/unzip, supervisor, git, composer
+ * php 7.1 (fpm, cli, bcmath, dev, common, json, opcache, readline, mbstring, mcrypt, curl, gd, imagick, mysql, zip, pgsql,  intl, xml, pear, browscap, memcached, redis)
 
 ## Usage
 
@@ -14,7 +13,7 @@ Creating container via `docker-compose` file.
 
 ```yaml
   web:
-    image: osvitlyi/nginx-php7-container
+    image: mordine/nginx-php7-container
     volumes:
       # 1. mount your workdir path
       - ./docker/src/html/:/usr/share/nginx/html/
