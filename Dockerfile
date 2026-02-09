@@ -86,7 +86,7 @@ RUN set -x \
 COPY ./config/supervisor/supervisord.conf /etc/supervisord.conf
 
 # Override nginx's default config
-COPY ./config/nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./config/nginx/nginx.conf /etc/nginx/nginx.conf
 
 # Override default nginx welcome page
 COPY html /usr/share/nginx/html
