@@ -70,6 +70,7 @@ RUN set -x \
     && sed -i -e "s/pm.max_spare_servers = 3/pm.max_spare_servers = 4/g" ${FPM_CONF} \
     && sed -i -e "s/pm.max_requests = 500/pm.max_requests = 200/g" ${FPM_CONF} \
     && sed -i -e "s/^;clear_env = no$/clear_env = no/" ${FPM_CONF} \
+    && sed -i -e "s/nginx/www-data/g" ${FPM_CONF} \
     && curl -o /tmp/composer-setup.php https://getcomposer.org/installer \
     && curl -o /tmp/composer-setup.sig https://composer.github.io/installer.sig \
     && php -r "if (hash('SHA384', file_get_contents('/tmp/composer-setup.php')) !== trim(file_get_contents('/tmp/composer-setup.sig'))) { unlink('/tmp/composer-setup.php'); echo 'Invalid installer' . PHP_EOL; exit(1); }" \
