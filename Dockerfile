@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV PHP_CONF=/etc/php/7.1/fpm/php.ini
 ENV FPM_CONF=/etc/php/7.1/fpm/pool.d/www.conf
 ARG COMPOSER_VERSION=2.7.9
-ENV BUILD_DEPS='curl gcc openssl make autoconf libc-dev zlib1g-dev pkg-config gnupg2 ca-certificates lsb-release debian-archive-keyring dirmngr wget apt-transport-https supervisor'
+ENV BUILD_DEPS='curl gcc openssl make autoconf libc-dev zlib1g-dev pkg-config gnupg2 ca-certificates lsb-release debian-archive-keyring dirmngr wget apt-transport-https supervisor tzdata-legacy'
 ENV EXTRA_DEPS='apt-utils nano zip unzip git libmemcached-dev libmemcached11 libmagickwand-dev'
 ARG CUSTOM_DEPS=''
 
