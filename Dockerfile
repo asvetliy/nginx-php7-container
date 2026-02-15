@@ -4,8 +4,9 @@ LABEL maintainer="Oleksandr Svitlyi <o.svitlyi@gmail.com>"
 
 # Let the container know that there is no tty
 ENV DEBIAN_FRONTEND=noninteractive
-ENV PHP_CONF=/etc/php/7.1/fpm/php.ini
-ENV FPM_CONF=/etc/php/7.1/fpm/pool.d/www.conf
+ARG PHP_VERSION=7.1
+ENV PHP_CONF=/etc/php/${PHP_VERSION}/fpm/php.ini
+ENV FPM_CONF=/etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
 ARG COMPOSER_VERSION=2.7.9
 ENV BUILD_DEPS='curl gcc openssl make autoconf libc-dev zlib1g-dev pkg-config gnupg2 ca-certificates lsb-release debian-archive-keyring dirmngr wget apt-transport-https supervisor tzdata-legacy'
 ENV EXTRA_DEPS='apt-utils nano zip unzip git libmemcached-dev libmemcached11 libmagickwand-dev'
@@ -25,35 +26,35 @@ RUN set -x \
     && apt update \
     && apt install -q -y nginx \
     && apt install -y \
-            php7.1-fpm \
-            php7.1-cli \
-            php7.1-bcmath \
-            php7.1-dev \
-            php7.1-common \
-            php7.1-json \
-            php7.1-opcache \
-            php7.1-readline \
-            php7.1-mbstring \
-            php7.1-mcrypt \
-            php7.1-curl \
-            php7.1-gd \
-            php7.1-imagick \
-            php7.1-mysql \
-            php7.1-zip \
-            php7.1-pgsql \
-            php7.1-intl \
-            php7.1-xml \
+            php${PHP_VERSION}-fpm \
+            php${PHP_VERSION}-cli \
+            php${PHP_VERSION}-bcmath \
+            php${PHP_VERSION}-dev \
+            php${PHP_VERSION}-common \
+            php${PHP_VERSION}-json \
+            php${PHP_VERSION}-opcache \
+            php${PHP_VERSION}-readline \
+            php${PHP_VERSION}-mbstring \
+            php${PHP_VERSION}-mcrypt \
+            php${PHP_VERSION}-curl \
+            php${PHP_VERSION}-gd \
+            php${PHP_VERSION}-imagick \
+            php${PHP_VERSION}-mysql \
+            php${PHP_VERSION}-zip \
+            php${PHP_VERSION}-pgsql \
+            php${PHP_VERSION}-intl \
+            php${PHP_VERSION}-xml \
             php-pear \
-            php7.1-igbinary \
-            php7.1-msgpack \
-            php7.1-redis \
-            php7.1-memcached \
+            php${PHP_VERSION}-igbinary \
+            php${PHP_VERSION}-msgpack \
+            php${PHP_VERSION}-redis \
+            php${PHP_VERSION}-memcached \
     && cd /tmp \
     && apt install -q -y python3 python3-pip \
     && pip3 install supervisor-stdlog --break-system-packages \
     && wget https://browscap.org/stream?q=PHP_BrowsCapINI \
-    && mv 'stream?q=PHP_BrowsCapINI' /etc/php/7.1/mods-available/browscap.ini \
-    && sed -i 's+;browscap = extra/browscap.ini+browscap = /etc/php/7.1/mods-available/browscap.ini+g' /etc/php/7.1/fpm/php.ini \
+    && mv 'stream?q=PHP_BrowsCapINI' /etc/php/${PHP_VERSION}/mods-available/browscap.ini \
+    && sed -i 's+;browscap = extra/browscap.ini+browscap = /etc/php/${PHP_VERSION}/mods-available/browscap.ini+g' /etc/php/${PHP_VERSION}/fpm/php.ini \
     && mkdir -p /run/php \
     && echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d \
     && rm -rf /etc/nginx/conf.d/default.conf \
@@ -62,7 +63,7 @@ RUN set -x \
     && sed -i -e "s/upload_max_filesize\s*=\s*2M/upload_max_filesize = 100M/g" ${PHP_CONF} \
     && sed -i -e "s/post_max_size\s*=\s*8M/post_max_size = 100M/g" ${PHP_CONF} \
     && sed -i -e "s/variables_order = \"GPCS\"/variables_order = \"EGPCS\"/g" ${PHP_CONF} \
-    && sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php/7.1/fpm/php-fpm.conf \
+    && sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php/${PHP_VERSION}/fpm/php-fpm.conf \
     && sed -i -e "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" ${FPM_CONF} \
     && sed -i -e "s/pm.max_children = 5/pm.max_children = 4/g" ${FPM_CONF} \
     && sed -i -e "s/pm.start_servers = 2/pm.start_servers = 3/g" ${FPM_CONF} \
