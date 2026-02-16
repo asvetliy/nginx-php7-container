@@ -54,7 +54,7 @@ RUN set -x \
     && pip3 install supervisor-stdlog --break-system-packages \
     && wget https://browscap.org/stream?q=PHP_BrowsCapINI \
     && mv 'stream?q=PHP_BrowsCapINI' /etc/php/${PHP_VERSION}/mods-available/browscap.ini \
-    && sed -i 's+;browscap = extra/browscap.ini+browscap = /etc/php/${PHP_VERSION}/mods-available/browscap.ini+g' /etc/php/${PHP_VERSION}/fpm/php.ini \
+    && sed -i "s+;browscap = extra/browscap.ini+browscap = /etc/php/${PHP_VERSION}/mods-available/browscap.ini+g" /etc/php/${PHP_VERSION}/fpm/php.ini \
     && mkdir -p /run/php \
     && echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d \
     && rm -rf /etc/nginx/conf.d/default.conf \
